@@ -127,6 +127,7 @@ public class AuthService extends BaseWebActionsService {
             return res;
 
         }catch (Exception e){
+            e.printStackTrace();
             return createResponse("oops sth unexpected happened");
         }
 
@@ -149,12 +150,46 @@ public class AuthService extends BaseWebActionsService {
             if(existingUser == null || !existingUser.getOtp().equals(inputOtp)){
                 return createResponse("invalid otp");
             }
+
             if(existingUser.getOtpExpiration().isBefore(LocalDateTime.now())){
                 return createResponse("otp expired");
             }
+
             res.setReturnCodeAndReturnMessage(0, "otp verified");
             return res;
         }catch (Exception e){
+            return createResponse("oops sth unexpected happened");
+        }
+    }
+
+    public OperationReturnObject resetPassword(JSONObject request){
+        try {
+            String email = request.getString("email");
+
+            if (email == null || email.isEmpty()) {
+                return createResponse("email is required");
+            }
+            SystemUserModel existingUser = systemUserRepository.findFirstByEmail(email);
+
+            if (existingUser == null) {
+                return createResponse("the provided email does not exist");
+            }
+
+            String password = request.getString("password");
+
+            if(password == null || password.isEmpty()) {
+                return createResponse("the new password is required");
+            }
+
+            password = passwordEncoder.encode(password);
+            existingUser.setPassword(password);
+            systemUserRepository.save(existingUser);
+
+            res.setReturnCodeAndReturnMessage(0, "password reset successfully");
+            return res;
+
+
+        }catch(Exception e){
             return createResponse("oops sth unexpected happened");
         }
     }
@@ -167,6 +202,7 @@ public class AuthService extends BaseWebActionsService {
             case "signup" -> signup(request);
             case "forgotPassword" -> forgotPassword(request);
             case "verifyOtp" -> verifyOtp(request);
+            case "resetPassword" -> resetPassword(request);
             default -> throw new IllegalArgumentException("Action " + action + " not known in this context");
         };
     }
