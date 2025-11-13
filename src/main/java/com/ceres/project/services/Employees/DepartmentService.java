@@ -41,7 +41,7 @@ private final EmployeeRepository employeeRepository;
         }
     }
 
-    public OperationReturnObject diplayDepartments(JSONObject request) {
+    public OperationReturnObject diplayDepartments() {
         try{
             List<DepartmentModel> departments = departmentsRepository.findAll();
             res.setCodeAndMessageAndReturnObject(0, "departments", departments);
@@ -107,15 +107,15 @@ private final EmployeeRepository employeeRepository;
                 List<EmployeeModel> employees = new ArrayList<>();
 
                 if (employeeIds != null && !employeeIds.trim().isEmpty()) {
+
                     employeeIds = employeeIds.replaceAll("[\\[\\]\\s]", "");
 
-                    if (!employeeIds.isEmpty()) {
+                    if (!employeeIds.trim().isEmpty()) {
                         for (String employeeId : employeeIds.split(",")) {
-                            if (!employeeId.trim().isEmpty()) {
                                     Optional<EmployeeModel> employee = employeeRepository.findById(Long.parseLong(employeeId.trim()));
                                     if (employee.isPresent()) {
                                         employees.add(employee.get());
-                                    }
+
                             }
                         }
                     }
@@ -137,7 +137,7 @@ private final EmployeeRepository employeeRepository;
     public OperationReturnObject switchActions(String action, JSONObject request) {
         return switch (action){
             case "addDepartment" -> createDepartment(request);
-            case "diplayDepartment" -> diplayDepartments(request);
+            case "diplayDepartment" -> diplayDepartments();
             case "displayEmployeeByDept" -> displayEmployeesByDepartment(request);
             case "displayDepartmentsWithEmployees" -> displayDepartmentsWithEmployees();
             default -> throw new IllegalArgumentException("Action " + action + " not known in this context");

@@ -36,7 +36,7 @@ public class EmployeesService  extends BaseWebActionsService {
             String gender = request.getString("gender");
             LocalDate birthDate = LocalDate.parse(request.getString("birthDate"));
             String employmentType = request.getString("employmentType");
-            Long departmentId = request.getLong("department");
+            Long departmentId = request.getLong("departmentId");
             String departmentName = request.getString("departmentName");
             String officeLocation = request.getString("officeLocation");
             LocalDate joiningDate = LocalDate.parse(request.getString("joiningDate"));
@@ -139,14 +139,14 @@ public class EmployeesService  extends BaseWebActionsService {
             employee.setFirstName(request.getString("firstName"));
             employee.setLastName(request.getString("lastName"));
             employee.setEmail(request.getString("email"));
-            employee.setMaritalStatus(request.getString("maritalStatus"));
+//            employee.setMaritalStatus(request.getString("maritalStatus"));
             employee.setPhone(request.getString("phoneNumber"));
             employee.setAddress(request.getString("address"));
             employee.setNationality(request.getString("nationality"));
-            employee.setGender(request.getString("gender"));
+//            employee.setGender(request.getString("gender"));
             employee.setBirthDate(LocalDate.parse(request.getString("birthDate")));
             employee.setEmploymentType(request.getString("employmentType"));
-            employee.setDepartment(request.getLong("department"));
+            employee.setDepartmentName(request.getString("departmentName"));
             employee.setOfficeLocation(request.getString("officeLocation"));
             employee.setJoiningDate(LocalDate.parse(request.getString("joiningDate")));
             employee.setDesignation(request.getString("designation"));
@@ -158,6 +158,8 @@ public class EmployeesService  extends BaseWebActionsService {
             return res;
 
         }catch(Exception e){
+            e.printStackTrace();
+
             return createResponse(e.getMessage());
         }
 
