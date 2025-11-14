@@ -140,7 +140,7 @@ public class EmployeesService  extends BaseWebActionsService {
             employee.setLastName(request.getString("lastName"));
             employee.setEmail(request.getString("email"));
 //            employee.setMaritalStatus(request.getString("maritalStatus"));
-            employee.setPhone(request.getString("phoneNumber"));
+            employee.setPhone(request.getString("phone"));
             employee.setAddress(request.getString("address"));
             employee.setNationality(request.getString("nationality"));
 //            employee.setGender(request.getString("gender"));
