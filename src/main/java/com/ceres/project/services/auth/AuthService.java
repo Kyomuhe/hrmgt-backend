@@ -43,7 +43,7 @@ public class AuthService extends BaseWebActionsService {
         final String token = jwtUtility.generateToken(userDetails);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("token", token); // this is the jwt token the user can user from now on.
+        response.put("token", token);
         response.put("user", userDetails);
 
 //        OperationReturnObject res = new OperationReturnObject();

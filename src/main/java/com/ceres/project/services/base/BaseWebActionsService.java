@@ -204,11 +204,11 @@ public abstract class BaseWebActionsService implements BaseWebActionsImpl {
      * @param username    Username of the user to check otherwise, will default to the currently logged-in user.
      * @return Boolean whether user has the permission otherwise throw an exception
      */
-    public Boolean can(@Nullable String username, String... permissions) {
+    public Boolean can( String... permissions) {
         UserDetails userDetails = getContextUserDetails();
-        if (username != null) {
-            userDetails = userDetailService.loadUserByUsername(username);
-        }
+//        if (username != null) {
+//            userDetails = userDetailService.loadUserByUsername(username);
+//        }
         // check the permission in quest
         for (String permission : permissions) {
             if (userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().matches(permission))) {

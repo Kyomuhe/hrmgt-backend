@@ -14,10 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobsService extends BaseWebActionsService {
 
-    final private JobRepository jobRepository;
+    private final JobRepository jobRepository;
     OperationReturnObject res = new OperationReturnObject();
 
     public OperationReturnObject createJob (JSONObject request){
+//        can("ADMINISTRATOR","can ","administrator");
+        
         try{
             JobsModel job = new JobsModel();
 

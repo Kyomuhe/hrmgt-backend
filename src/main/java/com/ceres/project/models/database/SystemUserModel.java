@@ -41,6 +41,10 @@ public class SystemUserModel implements UserDetails {
     @Basic
     @Column(name = "role_code")
     private String roleCode;
+    private Long employeeId;
+    private String department;
+    private String role;
+
     @Basic
     @Column(name = "created_at")
     private Timestamp createdAt;
