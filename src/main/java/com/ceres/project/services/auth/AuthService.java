@@ -61,6 +61,9 @@ public class AuthService extends BaseWebActionsService {
             String email = request.getString("email");
             String firstName = request.getString("firstName");
             String lastName = request.getString("lastName");
+            String department = request.getString("department");
+            String role = request.getString("role");
+            Long employeeId = request.getLong("employeeId");
 
             if (username == null || username.isEmpty()) {
                 return createResponse("Username is either null or empty");
@@ -84,6 +87,9 @@ public class AuthService extends BaseWebActionsService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setRoleCode("USER");
+            user.setDepartment(department);
+            user.setRole(role);
+            user.setEmployeeId(employeeId);
             user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             user.setIsActive(true);
 
@@ -103,6 +109,33 @@ public class AuthService extends BaseWebActionsService {
 
         } catch (RuntimeException e) {
             return createResponse("Failed to create account: " + e.getMessage());
+        }
+    }
+
+    public OperationReturnObject changeUserRole(JSONObject request){
+        try{
+            Long userId = request.getLong("userId");
+            String role = request.getString("roleCode");
+
+            if(userId == null){
+                return createResponse("user id is null");
+            }
+
+            Optional<SystemUserModel> userOptional = systemUserRepository.findById(userId);
+
+            if(!userOptional.isPresent()){
+                return createResponse("this user does not exist");
+            }
+
+            SystemUserModel user = userOptional.get();
+            user.setRoleCode(role);
+            systemUserRepository.save(user);
+
+            res.setReturnCodeAndReturnMessage(0, "changed role successfully");
+            return res;
+
+        }catch(Exception e){
+            return createResponse(e.getMessage());
         }
     }
 
@@ -193,6 +226,16 @@ public class AuthService extends BaseWebActionsService {
             return createResponse("oops sth unexpected happened");
         }
     }
+    public OperationReturnObject displayAllUsers (){
+        try{
+            List<SystemUserModel> users = systemUserRepository.findAll();
+            res.setCodeAndMessageAndReturnObject(0,"users displayed successfully", users);
+            return res;
+
+        }catch (Exception e){
+            return createResponse(e.getMessage());
+        }
+    }
 
 
     @Override
@@ -203,6 +246,8 @@ public class AuthService extends BaseWebActionsService {
             case "forgotPassword" -> forgotPassword(request);
             case "verifyOtp" -> verifyOtp(request);
             case "resetPassword" -> resetPassword(request);
+            case "displayAllUsers" -> displayAllUsers();
+            case "changeRole" -> changeUserRole(request);
             default -> throw new IllegalArgumentException("Action " + action + " not known in this context");
         };
     }
